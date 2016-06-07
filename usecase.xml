@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+ 
+<test>
+ 
+ 
+ 
+<case id="001" name="SHOW TABLES">
+ 
+<pre>
+ 
+REVOKE ALL ON SERVER server1 FROM ROLE test_role; GRANT ALL ON URI TO ROLE test_role;
+ 
+</pre>
+ 
+<perform>
+ 
+SHOW TABLES;
+ 
+</perform>
+ 
+<expect>
+ 
+tab_name
+ 
+</expect>
+ 
+</case>
+ 
+ 
+ 
+<case id="002" name="SHOW TABLES">
+ 
+<pre>
+ 
+REVOKE ALL ON SERVER server1 FROM ROLE test_role; 
+ 
+</pre>
+ 
+<perform>
+ 
+SHOW TABLES;
+ 
+</perform>
+ 
+<expect>
+ 
+FAILED: SemanticException No valid privileges
+ 
+</expect>
+ 
+</case>
+ 
+ 
+ 
+<case id="003" name="SHOW CREATE TABLE" privilege="SELECT">
+ 
+<pre>
+ 
+CREATE TABLE IF NOT EXISTS test_table1  (id INT,name STRING,salary FLOAT,street STRING,city STRING,state STRING,zip INT) PARTITIONED BY (address STRING) row format delimited fields terminated by ' ';
+ 
+REVOKE ALL ON SERVER server1 FROM ROLE test_role;GRANT SELECT ON TABLE test_table1 TO ROLE test_role;
+ 
+</pre>
+ 
+<perform>
+ 
+SHOW CREATE TABLE test_table1;
+ 
+</perform>
+ 
+<expect>
+ 
+createtab_stmt 
+ 
+</expect>
+ 
+</case>
+ 
+ 
+ 
+<case id="004" name="SHOW CREATE TABLE" privilege="INSERT">
+ 
+<pre>
+ 
+REVOKE ALL ON SERVER server1 FROM ROLE test_role;GRANT INSERT ON TABLE test_table1 TO ROLE test_role;
+ 
+</pre>
+ 
+<perform>
+ 
+SHOW CREATE TABLE test_table1;
+ 
+</perform>
+ 
+<expect>
+ 
+createtab_stmt 
+ 
+</expect>
+ 
+</case>
+ 
+ 
+ 
+<case id="005" name="SHOW CREATE TABLE" >
+ 
+<pre>
+ 
+REVOKE ALL ON SERVER server1 FROM ROLE test_role;
+ 
+</pre>
+ 
+<perform>
+ 
+SHOW CREATE TABLE test_table1;
+ 
+</perform>
+ 
+<expect>
+ 
+FAILED: SemanticException No valid privileges
+ 
+</expect>
+ 
+</case>
+ 
+ 
+ 
+</test>
